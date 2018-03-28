@@ -1,4 +1,4 @@
-<%@ page import="org.springframework.validation.FieldError" %>
+<%@ page import="untitled3.User; org.springframework.validation.FieldError" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -28,7 +28,15 @@
             </g:hasErrors>
             <g:form action="save">
                 <fieldset class="form">
-                    <f:all bean="message" except="createdAt"/>
+                    <div class="fieldcontain required">
+                        <label for="content" >Content</label>
+                        <g:textArea name="content" value="${content}" required="true"/>
+                    </div>
+                    <div class="fieldcontain required">
+                        <label for="author">Author</label>
+                        <g:select name="author" from="${User.getAll()}" optionKey="id" optionValue="username" required="true" value="true"/>
+                    </div>
+                    %{--<f:all bean="message" except="createdAt"/>--}%
                 </fieldset>
                 <fieldset class="buttons">
                     <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />

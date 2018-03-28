@@ -5,18 +5,18 @@ import groovy.transform.ToString
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
-@ToString(includeNames = true, excludes = "user")
+@ToString(includeNames = true, excludes = "author")
 class Message {
 
     Long id
     String content
     Date createdAt
 
-    static belongsTo = [user: User]
+    static belongsTo = [author: User]
 
     static constraints = {
         content(blank: false, nullable: false)
         createdAt(nullable: true)
-        user(nullable: false)
+        author(nullable: false)
     }
 }

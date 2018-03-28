@@ -16,7 +16,7 @@ databaseChangeLog = {
 
             column(name: "created_at", type: "timestamp")
 
-            column(name: "user_id", type: "BIGINT") {
+            column(name: "author_id", type: "BIGINT") {
                 constraints(nullable: "false")
             }
         }
@@ -107,7 +107,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "sdoro (generated)", id: "1522242341288-10") {
-        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "message", constraintName: "FK_f80s4splfik51j2ja555ygvws", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user")
+        addForeignKeyConstraint(baseColumnNames: "author_id", baseTableName: "message", constraintName: "FK_f80s4splfik51j2ja555ygvws", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user")
     }
 
     changeSet(author: "sdoro (generated)", id: "1522242341288-11") {
@@ -133,10 +133,10 @@ databaseChangeLog = {
         sql("""insert into user_roles(user_id, role_id) values(3, 1);""")
         sql("""insert into user_roles(user_id, role_id) values(3, 3);""")
 
-        sql("""insert into message(version, created_at, user_id, content) values(1, CURRENT_TIMESTAMP(), 1, 'qwe 1 message');""")
-        sql("""insert into message(version, created_at, user_id, content) values(1, CURRENT_TIMESTAMP(), 1, 'qwe 2 message');""")
-        sql("""insert into message(version, created_at, user_id, content) values(1, CURRENT_TIMESTAMP(), 1, 'qwe 3 message');""")
-        sql("""insert into message(version, created_at, user_id, content) values(1, CURRENT_TIMESTAMP(), 2, 'asd 1 message');""")
-        sql("""insert into message(version, created_at, user_id, content) values(1, CURRENT_TIMESTAMP(), 2, 'asd 2 message');""")
+        sql("""insert into message(version, created_at, author_id, content) values(1, CURRENT_TIMESTAMP(), 1, 'qwe 1 message');""")
+        sql("""insert into message(version, created_at, author_id, content) values(1, CURRENT_TIMESTAMP(), 1, 'qwe 2 message');""")
+        sql("""insert into message(version, created_at, author_id, content) values(1, CURRENT_TIMESTAMP(), 1, 'qwe 3 message');""")
+        sql("""insert into message(version, created_at, author_id, content) values(1, CURRENT_TIMESTAMP(), 2, 'asd 1 message');""")
+        sql("""insert into message(version, created_at, author_id, content) values(1, CURRENT_TIMESTAMP(), 2, 'asd 2 message');""")
     }
 }
