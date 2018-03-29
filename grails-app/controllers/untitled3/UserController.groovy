@@ -23,20 +23,12 @@ class UserController {
 
     @Transactional
     def save(User user) {
-
         if (user == null) {
             transactionStatus.setRollbackOnly()
             notFound()
             return
         }
-//        def roles = new LinkedList()
-//        params.roles.each{
-//            def roleQuery = Role.where {
-//                authority == it
-//            }
-//            roles.add(roleQuery.find())
-//        }
-//        user.roles = roles
+
         if (user.hasErrors()) {
             transactionStatus.setRollbackOnly()
             respond user.errors, view:'create'
@@ -51,55 +43,6 @@ class UserController {
                 redirect user
             }
             '*' { respond user, [status: CREATED] }
-        }
-    }
-
-    def edit(User user) {
-        respond user
-    }
-
-    @Transactional
-    def update(User user) {
-        if (user == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (user.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond user.errors, view:'edit'
-            return
-        }
-
-        user.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'user.label', default: 'User'), user.id])
-                redirect user
-            }
-            '*'{ respond user, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(User user) {
-
-        if (user == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        user.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'user.label', default: 'User'), user.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
         }
     }
 
