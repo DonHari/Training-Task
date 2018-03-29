@@ -9,7 +9,6 @@ import groovy.transform.ToString
 @EqualsAndHashCode(includes = 'username')
 class User implements Serializable{
 
-    Long id
     String username
     String password
     boolean enabled = true
@@ -18,18 +17,20 @@ class User implements Serializable{
     boolean passwordExpired
     String name
 
+    Set<Role> getAuthorities() {
+        (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
+    }
+
     static constraints = {
         username blank: false, unique: true
         password blank: false, password: true
         name nullable: false
-        roles nullable: false
     }
 
     static mapping = {
-        roles lazy: false
         messages lazy: false
     }
 
-    static hasMany = [messages: Message, roles: Role]
+    static hasMany = [messages: Message]
 
 }

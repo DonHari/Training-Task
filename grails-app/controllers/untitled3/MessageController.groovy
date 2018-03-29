@@ -1,92 +1,68 @@
 package untitled3
 
+import grails.plugin.springsecurity.annotation.Secured
+
+//import grails.plugin.springsecurity.annotation.Secured
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
-@Transactional(readOnly = true)
+@Transactional
 class MessageController {
+
+    MessageService messageService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    @Secured(value = ["ROLE_ADMIN"])
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Message.list(params), model: [messageCount: Message.count()]
+        def messages = messageService.index(max, params)
+        respond messages, model: [messageCount: messages.size()]
     }
 
+    @Secured(value = ["ROLE_ADMIN"])
     def show(Message message) {
         respond message
     }
 
+    @Secured(value = ["ROLE_USER", "ROLE_ADMIN"])
     def create() {
         respond new Message(params)
     }
 
-    @Transactional
     def save(Message userMessage) {
-        userMessage.createdAt = new Date()
-        if (userMessage == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (userMessage.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond userMessage.errors, view: 'create'
-            return
-        }
-
-        userMessage.save flush: true
-
+        Message localMessage = messageService.save(userMessage)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'message.label', default: 'Message'), userMessage.id])
-                redirect userMessage
+                flash.message = message(code: 'default.created.message', args: [message(code: 'message.label', default: 'Message'), localMessage.id])
+                redirect localMessage
             }
-            '*' { respond userMessage, [status: CREATED] }
+            '*' { respond localMessage, [status: CREATED] }
         }
     }
 
+//    @Secured(value = ["ROLE_USER", "ROLE_ADMIN"])
     def edit(Message message) {
         respond message
     }
 
-    @Transactional
     def update(Message userMessage) {
-        if (userMessage == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (userMessage.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond userMessage.errors, view: 'edit'
-            return
-        }
-
-        userMessage.save flush: true
+        Message localMessage = messageService.save(userMessage)
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Message'), userMessage.id])
-                redirect message
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Message'), localMessage.id])
+                redirect localMessage
             }
-            '*' { respond message, [status: OK] }
+            '*' { respond localMessage, [status: OK] }
         }
     }
 
-    @Transactional
+//    @Secured(value = ["ROLE_USER", "ROLE_ADMIN"])
     def delete(Message userMessage) {
 
-        if (userMessage == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        userMessage.delete flush: true
+        messageService.delete(userMessage)
 
         request.withFormat {
             form multipartForm {

@@ -1,6 +1,6 @@
 databaseChangeLog = {
 
-    changeSet(author: "sdoro (generated)", id: "1522242341288-1") {
+    changeSet(author: "sdoro (generated)", id: "1522331094549-1") {
         createTable(tableName: "message") {
             column(autoIncrement: "true", name: "id", type: "BIGINT") {
                 constraints(primaryKey: "true", primaryKeyName: "messagePK")
@@ -10,25 +10,25 @@ databaseChangeLog = {
                 constraints(nullable: "false")
             }
 
+            column(name: "author_id", type: "BIGINT") {
+                constraints(nullable: "false")
+            }
+
             column(name: "content", type: "VARCHAR(255)") {
                 constraints(nullable: "false")
             }
 
             column(name: "created_at", type: "timestamp")
-
-            column(name: "author_id", type: "BIGINT") {
-                constraints(nullable: "false")
-            }
         }
     }
 
-    changeSet(author: "sdoro (generated)", id: "1522242341288-2") {
+    changeSet(author: "sdoro (generated)", id: "1522331094549-2") {
         createTable(tableName: "role") {
             column(autoIncrement: "true", name: "id", type: "BIGINT") {
                 constraints(primaryKey: "true", primaryKeyName: "rolePK")
             }
 
-            column(name: "version", type: "BIGINT") {
+            column(defaultValueNumeric: "1", name: "version", type: "BIGINT") {
                 constraints(nullable: "false")
             }
 
@@ -38,7 +38,7 @@ databaseChangeLog = {
         }
     }
 
-    changeSet(author: "sdoro (generated)", id: "1522242341288-3") {
+    changeSet(author: "sdoro (generated)", id: "1522331094549-3") {
         createTable(tableName: "user") {
             column(autoIncrement: "true", name: "id", type: "BIGINT") {
                 constraints(primaryKey: "true", primaryKeyName: "userPK")
@@ -78,8 +78,8 @@ databaseChangeLog = {
         }
     }
 
-    changeSet(author: "sdoro (generated)", id: "1522242341288-5") {
-        createTable(tableName: "user_roles") {
+    changeSet(author: "sdoro (generated)", id: "1522331094549-4") {
+        createTable(tableName: "user_role") {
             column(name: "user_id", type: "BIGINT") {
                 constraints(nullable: "false")
             }
@@ -90,28 +90,28 @@ databaseChangeLog = {
         }
     }
 
-    changeSet(author: "sdoro (generated)", id: "1522242341288-6") {
-        addPrimaryKey(columnNames: "user_id, role_id", tableName: "user_roles")
+    changeSet(author: "sdoro (generated)", id: "1522331094549-5") {
+        addPrimaryKey(columnNames: "user_id, role_id", constraintName: "user_rolePK", tableName: "user_role")
     }
 
-    changeSet(author: "sdoro (generated)", id: "1522242341288-7") {
+    changeSet(author: "sdoro (generated)", id: "1522331094549-6") {
         addUniqueConstraint(columnNames: "authority", constraintName: "UC_ROLEAUTHORITY_COL", tableName: "role")
     }
 
-    changeSet(author: "sdoro (generated)", id: "1522242341288-8") {
+    changeSet(author: "sdoro (generated)", id: "1522331094549-7") {
         addUniqueConstraint(columnNames: "username", constraintName: "UC_USERUSERNAME_COL", tableName: "user")
     }
 
-    changeSet(author: "sdoro (generated)", id: "1522242341288-9") {
-        addForeignKeyConstraint(baseColumnNames: "role_id", baseTableName: "user_roles", constraintName: "FK_5q4rc4fh1on6567qk69uesvyf", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "role")
+    changeSet(author: "sdoro (generated)", id: "1522331094549-8") {
+        addForeignKeyConstraint(baseColumnNames: "author_id", baseTableName: "message", constraintName: "FK_a36o69gw5y3h6q0tp2a0mgkl0", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user")
     }
 
-    changeSet(author: "sdoro (generated)", id: "1522242341288-10") {
-        addForeignKeyConstraint(baseColumnNames: "author_id", baseTableName: "message", constraintName: "FK_f80s4splfik51j2ja555ygvws", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user")
+    changeSet(author: "sdoro (generated)", id: "1522331094549-9") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "user_role", constraintName: "FK_apcc8lxk2xnug8377fatvbn04", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user")
     }
 
-    changeSet(author: "sdoro (generated)", id: "1522242341288-11") {
-        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "user_roles", constraintName: "FK_g1uebn6mqk9qiaw45vnacmyo2", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user")
+    changeSet(author: "sdoro (generated)", id: "1522331094549-10") {
+        addForeignKeyConstraint(baseColumnNames: "role_id", baseTableName: "user_role", constraintName: "FK_it77eq964jhfqtu54081ebtio", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "role")
     }
 
     changeSet(author: "Stas Dorozhko", id: "1-insert"){
@@ -126,12 +126,12 @@ databaseChangeLog = {
         sql("""insert into user(version, account_expired, account_locked, enabled, name, password, password_expired, username)
                 values(1, false, false, true, 'zxc', 'zxc', false, 'zxc');""")
 
-        sql("""insert into user_roles(user_id, role_id) values(1, 1);""")
-        sql("""insert into user_roles(user_id, role_id) values(1, 2);""")
-        sql("""insert into user_roles(user_id, role_id) values(2, 2);""")
-        sql("""insert into user_roles(user_id, role_id) values(3, 2);""")
-        sql("""insert into user_roles(user_id, role_id) values(3, 1);""")
-        sql("""insert into user_roles(user_id, role_id) values(3, 3);""")
+        sql("""insert into user_role(user_id, role_id) values(1, 1);""")
+        sql("""insert into user_role(user_id, role_id) values(1, 2);""")
+        sql("""insert into user_role(user_id, role_id) values(2, 2);""")
+        sql("""insert into user_role(user_id, role_id) values(3, 2);""")
+        sql("""insert into user_role(user_id, role_id) values(3, 1);""")
+        sql("""insert into user_role(user_id, role_id) values(3, 3);""")
 
         sql("""insert into message(version, created_at, author_id, content) values(1, CURRENT_TIMESTAMP(), 1, 'qwe 1 message');""")
         sql("""insert into message(version, created_at, author_id, content) values(1, CURRENT_TIMESTAMP(), 1, 'qwe 2 message');""")

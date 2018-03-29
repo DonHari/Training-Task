@@ -67,8 +67,17 @@ grails:
                 staticparts: none
     plugin:
         databasemigration:
+            changelogFileName: changelog.xml
             updateOnStart: true
-#            updateOnStartFileNames: 'changelog.xml'
+            updateOnStartFileName: changelog.xml
+        springsecurity:
+            userLookup:
+              userDomainClassName: untitled3.User
+              authorityJoinClassName: untitled3.UserRole
+            authority:
+              className: untitled3.Role
+            password:
+              algorithm: 'bcrypt'
 ---
 hibernate:
     cache:

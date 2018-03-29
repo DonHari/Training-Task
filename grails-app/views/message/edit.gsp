@@ -1,3 +1,4 @@
+<%@ page import="untitled3.User" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -29,7 +30,16 @@
             <g:form resource="${this.message}" method="PUT">
                 <g:hiddenField name="version" value="${this.message?.version}" />
                 <fieldset class="form">
-                    <f:all bean="message"/>
+                    <fieldset class="form">
+                        <div class="fieldcontain required">
+                            <label for="content" >Content</label>
+                            <g:textArea name="content" value="${message.content}" required="true"/>
+                        </div>
+                        <div class="fieldcontain required">
+                            <label for="author">Author</label>
+                            <g:select name="author" from="${User.getAll()}" optionKey="id" optionValue="username" required="true" value="${message.author.id}"/>
+                        </div>
+                    </fieldset>
                 </fieldset>
                 <fieldset class="buttons">
                     <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />

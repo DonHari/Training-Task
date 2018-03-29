@@ -36,7 +36,6 @@
                         <label for="author">Author</label>
                         <g:select name="author" from="${User.getAll()}" optionKey="id" optionValue="username" required="true" value="true"/>
                     </div>
-                    %{--<f:all bean="message" except="createdAt"/>--}%
                 </fieldset>
                 <fieldset class="buttons">
                     <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />

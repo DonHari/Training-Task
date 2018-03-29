@@ -2,13 +2,9 @@ package untitled3
 
 import groovy.transform.ToString
 
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
-
 @ToString(includeNames = true, excludes = "author")
-class Message {
+class Message implements Comparable<Message> {
 
-    Long id
     String content
     Date createdAt
 
@@ -18,5 +14,11 @@ class Message {
         content(blank: false, nullable: false)
         createdAt(nullable: true)
         author(nullable: false)
+    }
+
+    @Override
+    int compareTo(Message message) {
+        authorId <=> message.authorId ?:
+                message.createdAt <=> createdAt//for correct order (DESC createdAt)
     }
 }

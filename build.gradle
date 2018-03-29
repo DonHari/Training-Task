@@ -86,6 +86,9 @@ dependencies {
     //for migration
     runtime 'org.grails.plugins:database-migration:2.0.1'
     compile 'org.liquibase:liquibase-core:3.5.3'
+
+    //security
+    compile 'org.grails.plugins:spring-security-core:3.1.2'
 }
 
 task wrapper(type: Wrapper) {

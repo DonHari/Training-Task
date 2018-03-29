@@ -11,7 +11,6 @@ class Role implements Serializable {
 
     private static final long serialVersionUID = 1
 
-    Long id
     String authority
 
     static constraints = {
@@ -22,9 +21,5 @@ class Role implements Serializable {
         cache true
         version defaultValue: 1
     }
-
-    static belongsTo = [User]
-
-    static hasMany = [users: User]
 
 }
