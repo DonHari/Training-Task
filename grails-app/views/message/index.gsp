@@ -29,7 +29,11 @@
                 <tbody>
                     <g:each in="${messageList}" var="myMessage">
                         <tr>
-                            <td>${myMessage.content}</td>
+                            <td>
+                                <a href="show/${myMessage.id}">
+                                    ${myMessage.content}
+                                </a>
+                            </td>
                             <td>${myMessage.createdAt}</td>
                             <td>
                                 <a href="/user/show/${myMessage.author.getId()}">

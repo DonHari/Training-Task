@@ -19,7 +19,24 @@
             <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <f:display bean="message" />
+            <ol class="property-list message">
+                <li class="fieldcontain">
+                    <span class="property-label">Content</span>
+                    <div class="property-value">${message.content}</div>
+                </li>
+                <li class="fieldcontain">
+                    <span class="property-label">Created at</span>
+                    <div class="property-value">${message.createdAt}</div>
+                </li>
+                <li class="fieldcontain">
+                    <span class="property-label">Author</span>
+                    <div class="property-value">
+                        <a href="/user/show/${message.author.id}">
+                            ${message.author.username}
+                        </a>
+                    </div>
+                </li>
+            </ol>
             <g:form resource="${this.message}" method="DELETE">
                 <fieldset class="buttons">
                     <g:link class="edit" action="edit" resource="${this.message}"><g:message code="default.button.edit.label" default="Edit" /></g:link>

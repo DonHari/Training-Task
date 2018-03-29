@@ -33,12 +33,20 @@
                 <tbody>
                     <g:each in="${userList}" var="user">
                         <tr>
-                            <td>${user.username}</td>
+                            <td>
+                                <a href="show/${user.id}">
+                                    ${user.username}
+                                </a>
+                            </td>
                             <td>${user.name}</td>
                             <td>
                                 <ul>
                                     <g:each in="${user.roles}" var="role">
-                                        <li>${role.authority}</li>
+                                        <li>
+                                            <a href="/role/show/${role.id}">
+                                                ${role.authority}
+                                            </a>
+                                        </li>
                                     </g:each>
                                 </ul>
                             </td>

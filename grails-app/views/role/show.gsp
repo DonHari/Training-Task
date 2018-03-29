@@ -19,7 +19,26 @@
             <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <f:display bean="role" />
+            <ol class="property-list message">
+                <li class="fieldcontain">
+                    <span class="property-label">Authority</span>
+                    <div class="property-value">${role.authority}</div>
+                </li>
+                <li class="fieldcontain">
+                    <span class="property-label">Users</span>
+                    <div class="property-value">
+                        <g:each in="${role.users}" var="user">
+                            <ul>
+                                <li style="list-style: none">
+                                    <a href="/user/show/${user.id}">
+                                        ${user.username}
+                                    </a>
+                                </li>
+                            </ul>
+                        </g:each>
+                    </div>
+                </li>
+            </ol>
             <g:form resource="${this.role}" method="DELETE">
                 <fieldset class="buttons">
                     <g:link class="edit" action="edit" resource="${this.role}"><g:message code="default.button.edit.label" default="Edit" /></g:link>

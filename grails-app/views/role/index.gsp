@@ -28,7 +28,11 @@
                 <tbody>
                     <g:each in="${roleList}" var="role">
                         <tr>
-                            <td>${role.authority}</td>
+                            <td>
+                                <a href="show/${role.id}">
+                                    ${role.authority}
+                                </a>
+                            </td>
                             <td>
                                 <g:each in="${role.users}" var="user">
                                     <ul>
