@@ -18,8 +18,32 @@
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <f:table collection="${roleList}" />
-
+            <table>
+                <thead>
+                    <tr>
+                        <th>Authority</th>
+                        <th>Users</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <g:each in="${roleList}" var="role">
+                        <tr>
+                            <td>${role.authority}</td>
+                            <td>
+                                <g:each in="${role.users}" var="user">
+                                    <ul>
+                                        <li>
+                                            <a href="/user/show/${user.id}">
+                                                ${user.username}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </g:each>
+                            </td>
+                        </tr>
+                    </g:each>
+                </tbody>
+            </table>
             <div class="pagination">
                 <g:paginate total="${roleCount ?: 0}" />
             </div>

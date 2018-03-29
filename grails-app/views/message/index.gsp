@@ -18,8 +18,28 @@
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <f:table collection="${messageList}" />
-
+            <table>
+                <thead>
+                    <tr>
+                        <th>Content</th>
+                        <th>Created at</th>
+                        <th>Author</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <g:each in="${messageList}" var="myMessage">
+                        <tr>
+                            <td>${myMessage.content}</td>
+                            <td>${myMessage.createdAt}</td>
+                            <td>
+                                <a href="/user/show/${myMessage.author.getId()}">
+                                    ${myMessage.author.getUsername()}
+                                </a>
+                            </td>
+                        </tr>
+                    </g:each>
+                </tbody>
+            </table>
             <div class="pagination">
                 <g:paginate total="${messageCount ?: 0}" />
             </div>

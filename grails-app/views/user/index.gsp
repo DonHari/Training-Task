@@ -18,8 +18,38 @@
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <f:table collection="${userList}" />
-
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Roles</th>
+                        <th>Account expired</th>
+                        <th>Account locked</th>
+                        <th>Enabled</th>
+                        <th>Password expired</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <g:each in="${userList}" var="user">
+                        <tr>
+                            <td>${user.username}</td>
+                            <td>${user.name}</td>
+                            <td>
+                                <ul>
+                                    <g:each in="${user.roles}" var="role">
+                                        <li>${role.authority}</li>
+                                    </g:each>
+                                </ul>
+                            </td>
+                            <td>${user.accountExpired}</td>
+                            <td>${user.accountLocked}</td>
+                            <td>${user.enabled}</td>
+                            <td>${user.passwordExpired}</td>
+                        </tr>
+                    </g:each>
+                </tbody>
+            </table>
             <div class="pagination">
                 <g:paginate total="${userCount ?: 0}" />
             </div>
