@@ -42,7 +42,7 @@
                     </div>
                     <div class="fieldcontain required">
                         <label for="roles">Roles</label>
-                        <% def roles = Role.getAll()%>
+                        <% List<Role> roles = Role.getAll()%>
                         <g:select name="roles" from="${roles}" optionKey="id" optionValue="authority" multiple="true" required="true" value="true"/>
                     </div>
                     %{--<f:all bean="user" except="accountExpired,enabled,accountLocked,passwordExpired,messages"/>--}%

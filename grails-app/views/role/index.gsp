@@ -22,7 +22,6 @@
                 <thead>
                     <tr>
                         <th>Authority</th>
-                        <th>Users</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,17 +31,6 @@
                                 <a href="show/${role.id}">
                                     ${role.authority}
                                 </a>
-                            </td>
-                            <td>
-                                <g:each in="${role.users}" var="user">
-                                    <ul>
-                                        <li>
-                                            <a href="/user/show/${user.id}">
-                                                ${user.username}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </g:each>
                             </td>
                         </tr>
                     </g:each>

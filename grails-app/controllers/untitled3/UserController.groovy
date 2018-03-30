@@ -14,7 +14,8 @@ class UserController {
 
     @Secured(value = ['ROLE_ADMIN'])
     def index(Integer max) {
-        userService.index(max)
+        List<User> users = userService.index(max)
+        respond users, model: [userCount: users.size()]
     }
 
     @Secured(value = ['ROLE_USER', 'ROLE_ADMIN'])

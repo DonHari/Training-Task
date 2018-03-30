@@ -4,6 +4,7 @@ import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.userdetails.GrailsUserDetailsService
 import grails.plugin.springsecurity.userdetails.NoStackUsernameNotFoundException
 import grails.transaction.Transactional
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 
@@ -24,7 +25,7 @@ class UserDetailsService implements GrailsUserDetailsService {
 
         Set<Role> roles = user.authorities
 
-        def authorities = roles.collect {
+        List<GrantedAuthority> authorities = roles.collect {
             new SimpleGrantedAuthority(it.authority)
         }
 

@@ -6,13 +6,13 @@ import grails.transaction.Transactional
 class UserServiceImplService implements UserService {
 
     @Override
-    def index(Integer max) {
+    List<User> index(Integer max) {
         Integer localMax = Math.min(max ?: 10, 100)
         User.findAll(max: localMax)
     }
 
     @Override
-    def save(User user) {
+    User save(User user) {
         if(user){
             if(User.findAllByUsername(user.username)){
                 //show message that username already exists

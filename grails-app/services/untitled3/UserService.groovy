@@ -2,7 +2,7 @@ package untitled3
 
 interface UserService {
 
-    def index(Integer max)
-    def save(User user)
+    List<User> index(Integer max)
+    User save(User user)
 
 }

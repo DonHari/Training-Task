@@ -5,6 +5,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+@Secured(value = ['ROLE_ADMIN'])
 @Transactional(readOnly = true)
 class RoleController {
 
@@ -12,9 +13,9 @@ class RoleController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    @Secured(value = ['ROLE_ADMIN'])
     def index(Integer max) {
-        roleService.index(max)
+        List<Role> roles = roleService.index(max)
+        respond roles, model: [roleCount: roles.size()]
     }
 
     def show(Role role) {

@@ -2,6 +2,6 @@ package untitled3
 
 interface RoleService {
 
-    def index(Integer max)
-    def save(Role role)
+    List<Role> index(Integer max)
+    Role save(Role role)
 }

@@ -12,7 +12,7 @@ class MessageController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        def messages = messageService.index(max)
+        List<Message> messages = messageService.index(max)
         respond messages, model: [messageCount: messages.size()]
     }
 
@@ -43,6 +43,7 @@ class MessageController {
         respond message
     }
 
+    @Secured(value = ["ROLE_USER"])
     def update(Message userMessage) {
         Message localMessage = messageService.save(userMessage)
 

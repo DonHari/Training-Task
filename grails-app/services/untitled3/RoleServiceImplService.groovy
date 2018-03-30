@@ -6,13 +6,13 @@ import grails.transaction.Transactional
 class RoleServiceImplService implements RoleService {
 
     @Override
-    def index(Integer max) {
+    List<Role> index(Integer max) {
         Integer localMax = Math.min(max ?: 10, 100)
         Role.findAll(max: localMax)
     }
 
     @Override
-    def save(Role role) {
+    Role save(Role role) {
         if (role && Role.findAllByAuthority(role.authority).size() != 1) {
             role.save()
         }
