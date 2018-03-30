@@ -1,9 +1,6 @@
 package untitled3
 
 import grails.plugin.springsecurity.annotation.Secured
-
-//import grails.plugin.springsecurity.annotation.Secured
-
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
@@ -14,22 +11,21 @@ class MessageController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    @Secured(value = ["ROLE_ADMIN"])
     def index(Integer max) {
-        def messages = messageService.index(max, params)
+        def messages = messageService.index(max)
         respond messages, model: [messageCount: messages.size()]
     }
 
-    @Secured(value = ["ROLE_ADMIN"])
     def show(Message message) {
         respond message
     }
 
-    @Secured(value = ["ROLE_USER", "ROLE_ADMIN"])
+    @Secured(value = ["ROLE_USER"])
     def create() {
         respond new Message(params)
     }
 
+    @Secured(value = ['ROLE_USER'])
     def save(Message userMessage) {
         Message localMessage = messageService.save(userMessage)
 
@@ -42,7 +38,7 @@ class MessageController {
         }
     }
 
-//    @Secured(value = ["ROLE_USER", "ROLE_ADMIN"])
+    @Secured(value = ["ROLE_USER", "ROLE_ADMIN"])
     def edit(Message message) {
         respond message
     }
@@ -59,7 +55,7 @@ class MessageController {
         }
     }
 
-//    @Secured(value = ["ROLE_USER", "ROLE_ADMIN"])
+    @Secured(value = ["ROLE_USER", "ROLE_ADMIN"])
     def delete(Message userMessage) {
 
         messageService.delete(userMessage)

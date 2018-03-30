@@ -1,41 +1,36 @@
 package untitled3
 
+import grails.plugin.springsecurity.annotation.Secured
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class UserController {
 
+    UserService userService
+
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    @Secured(value = ['ROLE_ADMIN'])
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond User.list(params), model:[userCount: User.count()]
+        userService.index(max)
     }
 
+    @Secured(value = ['ROLE_USER', 'ROLE_ADMIN'])
     def show(User user) {
         respond user
     }
 
+    //todo check if user unauthorized and put this code into service
+    @Secured(value = ['ROLE_USER'])
     def create() {
         respond new User(params)
     }
 
     @Transactional
     def save(User user) {
-        if (user == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (user.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond user.errors, view:'create'
-            return
-        }
-
-        user.save flush:true
+        userService.save(user)
 
         request.withFormat {
             form multipartForm {
@@ -52,7 +47,7 @@ class UserController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' { render status: NOT_FOUND }
         }
     }
 }

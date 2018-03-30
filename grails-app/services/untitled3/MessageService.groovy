@@ -2,6 +2,9 @@ package untitled3
 
 import grails.transaction.Transactional
 import grails.web.servlet.mvc.GrailsParameterMap
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.core.context.SecurityContextHolder
+
 
 import static org.springframework.http.HttpStatus.NOT_FOUND
 
@@ -9,18 +12,16 @@ import static org.springframework.http.HttpStatus.NOT_FOUND
 //todo interface
 class MessageService {
 
-    def serviceMethod() {
-
-    }
-
-    def index(Integer max, GrailsParameterMap params){
-        params.max = Math.min(max ?: 10, 100)
-        List<Message> messages = Message.list(params)
+    def index(Integer max){
+        Integer localMax = Math.min(max ?: 10, 100)
+        List<Message> messages = Message.findAll(max: localMax)
         messages.sort()
     }
 
     def save(Message message) {
         message.createdAt = new Date()
+        UserDetails userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal() as UserDetails
+        message.author = User.get(userDetails.id as Long)
 
         message.save()
     }
@@ -31,7 +32,12 @@ class MessageService {
             notFound()
             return
         }
-        message.delete()
+        UserDetails authorizedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal() as UserDetails
+        if(authorizedUser.id == message.authorId) {
+            message.delete()
+        } else {
+            throw new AccessDeniedException("You can't delete this message")
+        }
     }
 
     protected void notFound() {

@@ -18,7 +18,7 @@ class Message implements Comparable<Message> {
 
     @Override
     int compareTo(Message message) {
-        authorId <=> message.authorId ?:
+        message.authorId <=> authorId ?:
                 message.createdAt <=> createdAt//for correct order (DESC createdAt)
     }
 }

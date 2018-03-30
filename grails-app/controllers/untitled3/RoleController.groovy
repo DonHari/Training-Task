@@ -1,16 +1,20 @@
 package untitled3
 
+import grails.plugin.springsecurity.annotation.Secured
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class RoleController {
 
+    RoleService roleService
+
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    @Secured(value = ['ROLE_ADMIN'])
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Role.list(params), model:[roleCount: Role.count()]
+        roleService.index(max)
     }
 
     def show(Role role) {
@@ -23,19 +27,8 @@ class RoleController {
 
     @Transactional
     def save(Role role) {
-        if (role == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
 
-        if (role.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond role.errors, view:'create'
-            return
-        }
-
-        role.save flush:true
+        roleService.save(role)
 
         request.withFormat {
             form multipartForm {
@@ -52,7 +45,7 @@ class RoleController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'role.label', default: 'Role'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' { render status: NOT_FOUND }
         }
     }
 }
