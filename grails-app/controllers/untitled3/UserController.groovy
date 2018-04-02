@@ -16,7 +16,7 @@ class UserController {
     def subscribe(User user) {
         User user1 = userService.subscribe(user)
         if (user1) {
-            redirect(controller: "user", action: "show", id: user1.id, params: [user: user1])
+            respond(user1, view: '/user/show', status: OK)
         } else {
             render(view: '/customError', model: ['errorMessage': "You can't subscribe yourself!"])
         }
@@ -41,8 +41,8 @@ class UserController {
     @Transactional
     @Secured(value = ['IS_AUTHENTICATED_ANONYMOUSLY'])
     def save(User user) {
-        userService.save(user)
+        User localUser = userService.save(user)
 
-        redirect(controller: "user", action: "show", id: user.id, params: [user: user])
+        respond(localUser, status: CREATED, view: "/user/show")
     }
 }

@@ -28,27 +28,8 @@ class RoleController {
 
     @Transactional
     def save(Role role) {
-
         Role localRole = roleService.save(role)
 
-        redirect(controller: "role", action: "show", id: localRole.id, params: [role: localRole], status: CREATED)
-//        request.withFormat {
-//            form multipartForm {
-//                flash.message = message(code: 'default.created.message', args: [message(code: 'role.label', default: 'Role'), role.id])
-//                redirect role
-//            }
-//            '*' { respond role, [status: CREATED] }
-//        }
-    }
-
-    protected void notFound() {
-        redirect(controller: "role", action: "index", method: "GET", status: NOT_FOUND)
-//        request.withFormat {
-//            form multipartForm {
-//                flash.message = message(code: 'default.not.found.message', args: [message(code: 'role.label', default: 'Role'), params.id])
-//                redirect action: "index", method: "GET"
-//            }
-//            '*' { render status: NOT_FOUND }
-//        }
+        respond(localRole, status: CREATED, view: "/role/show")
     }
 }
