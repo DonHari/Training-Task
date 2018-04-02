@@ -75,6 +75,29 @@
                         </g:each>
                     </div>
                 </li>
+                <li class="fieldcontain">
+                    <span class="property-label">Subscribers</span>
+                    <div class="property-value">
+                        <g:each in="${user.subscribers}" var="subscriber">
+                            <ul>
+                                <li style="list-style: none">
+                                    <a href="/user/show/${subscriber.id}">
+                                        ${subscriber.username}
+                                    </a>
+                                </li>
+                            </ul>
+                        </g:each>
+                    </div>
+                </li>
+                <g:form method="POST" action="subscribe" controller="user" id="${user.id}">
+                    <fieldset class="buttons">
+                        %{--<g:link class="edit" action="edit" resource="${this.message}"><g:message code="default.button.edit.label" default="Edit" /></g:link>--}%
+                        <input type="submit" value="${message(code: 'default.button.subscribe.label', default: 'Subscribe')}"/>
+                    </fieldset>
+                </g:form>
+                %{--<g:form controller="user" action="subscribe" method="POST">--}%
+                    %{--<g:actionSubmit value="${message(code: 'default.button.subscribe.label', default: 'Subscribe')}" action="subscribe"/>--}%
+                %{--</g:form>--}%
             </ol>
         </div>
     </body>

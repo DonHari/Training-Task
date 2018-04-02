@@ -6,6 +6,8 @@
     <g:if env="development"><asset:stylesheet src="errors.css"/></g:if>
 </head>
 <body>
-    <div>Error: ${errorMessage}</div>
+<ul class="errors">
+    <li>${errorMessage}</li>
+</ul>
 </body>
 </html>

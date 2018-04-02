@@ -16,9 +16,14 @@ class UserServiceImplService implements UserService {
     User save(User user) {
         if (user) {
             if (User.findAllByUsername(user.username)) {
-                //todo show message that username already exists
+                throw new AlreadyExistsException("This username is not available")
             }
-            user.save()
+            User localUser = user.save()
+            UserRole userRole = new UserRole()
+            userRole.user = localUser
+            userRole.role = Role.findByAuthority("ROLE_USER")
+            userRole.save()
+            return localUser
         }
     }
 

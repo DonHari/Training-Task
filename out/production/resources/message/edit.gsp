@@ -35,10 +35,10 @@
                             <label for="content" >Content</label>
                             <g:textArea name="content" value="${message.content}" required="true"/>
                         </div>
-                        <div class="fieldcontain required">
-                            <label for="author">Author</label>
-                            <g:select name="author" from="${User.getAll()}" optionKey="id" optionValue="username" required="true" value="${message.author.id}"/>
-                        </div>
+                        %{--<div class="fieldcontain required">--}%
+                            %{--<label for="author">Author</label>--}%
+                            %{--<g:select name="author" from="${User.getAll()}" optionKey="id" optionValue="username" required="true" value="${message.author.id}"/>--}%
+                        %{--</div>--}%
                     </fieldset>
                 </fieldset>
                 <fieldset class="buttons">

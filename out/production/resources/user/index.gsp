@@ -23,7 +23,6 @@
                     <tr>
                         <th>Username</th>
                         <th>Name</th>
-                        <th>Roles</th>
                         <th>Account expired</th>
                         <th>Account locked</th>
                         <th>Enabled</th>
@@ -39,17 +38,6 @@
                                 </a>
                             </td>
                             <td>${user.name}</td>
-                            <td>
-                                <ul>
-                                    <g:each in="${user.roles}" var="role">
-                                        <li>
-                                            <a href="/role/show/${role.id}">
-                                                ${role.authority}
-                                            </a>
-                                        </li>
-                                    </g:each>
-                                </ul>
-                            </td>
                             <td>${user.accountExpired}</td>
                             <td>${user.accountLocked}</td>
                             <td>${user.enabled}</td>

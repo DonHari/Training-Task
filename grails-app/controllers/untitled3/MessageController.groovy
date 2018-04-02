@@ -32,7 +32,8 @@ class MessageController {
     def save(Message userMessage) {
         Message localMessage = messageService.save(userMessage)
 
-        redirect(controller: "message", action: "show", params: [message: localMessage], status: CREATED, id: localMessage.id)
+        respond(localMessage, status: CREATED, view: "/message/show")
+//        redirect(controller: "message", action: "show", model: [message: localMessage], status: CREATED, id: localMessage.id)
     }
 
     @Secured(value = ["ROLE_USER", "ROLE_ADMIN"])
@@ -44,23 +45,18 @@ class MessageController {
     def update(Message userMessage) {
         Message localMessage = messageService.save(userMessage)
 
-        redirect(controller: "message", action: "show", params: [message: localMessage], status: OK, id: localMessage.id)
+        respond(localMessage, status: OK, view: "/message/show")
+//        redirect(controller: "message", action: "show", params: [message: localMessage], status: OK, id: localMessage.id)
     }
 
     @Secured(value = ["ROLE_USER", "ROLE_ADMIN"])
     def delete(Message userMessage) {
         messageService.delete(userMessage)
-
         redirect(controller: "message", action: "index", method: "GET", status: NO_CONTENT)
     }
 
     protected void notFound() {
         redirect(controller: "message", action: "index", method: "GET", status: NOT_FOUND)
-    }
-
-    //todo figure out why this doesn't work?
-    def accessDeniedException(final AccessDeniedException exception) {
-        render(view: 'customError', model: [message: exception.message])
     }
 
 }

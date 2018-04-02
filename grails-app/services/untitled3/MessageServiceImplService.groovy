@@ -1,12 +1,8 @@
 package untitled3
 
 import grails.transaction.Transactional
-import grails.web.servlet.mvc.GrailsParameterMap
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder
-
-
-import static org.springframework.http.HttpStatus.NOT_FOUND
 
 @Transactional
 class MessageServiceImplService implements MessageService {
@@ -26,15 +22,11 @@ class MessageServiceImplService implements MessageService {
     }
 
     def delete(Message message) {
-        if (message == null) {
-            transactionStatus.setRollbackOnly()
-            return
-        }
         UserDetails authorizedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal() as UserDetails
         if (authorizedUser.id == message.authorId) {
             message.delete()
         } else {
-            throw new AccessDeniedException("You can't delete this message")
+            throw new AccessDeniedException("Only author can delete this message")
         }
     }
 }

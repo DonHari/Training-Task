@@ -1,3 +1,4 @@
+<%@ page import="untitled3.User; untitled3.UserRole" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -27,7 +28,13 @@
                 <li class="fieldcontain">
                     <span class="property-label">Users</span>
                     <div class="property-value">
-                        <g:each in="${role.users}" var="user">
+                        <%
+                            List<User> users = new LinkedList<>()
+                            List<UserRole> userRoles = UserRole.findAllByRole(role).each {
+                                users << it.user
+                            }
+                        %>
+                        <g:each in="${users}" var="user">
                             <ul>
                                 <li style="list-style: none">
                                     <a href="/user/show/${user.id}">
