@@ -8,7 +8,11 @@ class Message implements Comparable<Message> {
     String content
     Date createdAt
 
-    static belongsTo = [author: User]
+    static belongsTo = [User]
+
+    static hasOne = [author: User]
+
+//    static hasMany = [subscribers: User]
 
     static constraints = {
         content(blank: false, nullable: false)

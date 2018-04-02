@@ -1,6 +1,9 @@
 package untitled3
 
 import grails.plugin.springsecurity.annotation.Secured
+
+import java.nio.file.AccessDeniedException
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
@@ -13,70 +16,51 @@ class MessageController {
 
     def index(Integer max) {
         List<Message> messages = messageService.index(max)
-        respond messages, model: [messageCount: messages.size()]
+        respond(messages, model: [messageCount: messages.size()])
     }
 
     def show(Message message) {
-        respond message
+        respond(message)
     }
 
     @Secured(value = ["ROLE_USER"])
     def create() {
-        respond new Message(params)
+        respond(new Message(params))
     }
 
     @Secured(value = ['ROLE_USER'])
     def save(Message userMessage) {
         Message localMessage = messageService.save(userMessage)
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'message.label', default: 'Message'), localMessage.id])
-                redirect localMessage
-            }
-            '*' { respond localMessage, [status: CREATED] }
-        }
+        redirect(controller: "message", action: "show", params: [message: localMessage], status: CREATED, id: localMessage.id)
     }
 
     @Secured(value = ["ROLE_USER", "ROLE_ADMIN"])
     def edit(Message message) {
-        respond message
+        respond(message)
     }
 
     @Secured(value = ["ROLE_USER"])
     def update(Message userMessage) {
         Message localMessage = messageService.save(userMessage)
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Message'), localMessage.id])
-                redirect localMessage
-            }
-            '*' { respond localMessage, [status: OK] }
-        }
+        redirect(controller: "message", action: "show", params: [message: localMessage], status: OK, id: localMessage.id)
     }
 
     @Secured(value = ["ROLE_USER", "ROLE_ADMIN"])
     def delete(Message userMessage) {
-
         messageService.delete(userMessage)
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Message'), userMessage.id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NO_CONTENT }
-        }
+        redirect(controller: "message", action: "index", method: "GET", status: NO_CONTENT)
     }
 
     protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'message.label', default: 'Message'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NOT_FOUND }
-        }
+        redirect(controller: "message", action: "index", method: "GET", status: NOT_FOUND)
     }
+
+    //todo figure out why this doesn't work?
+    def accessDeniedException(final AccessDeniedException exception) {
+        render(view: 'customError', model: [message: exception.message])
+    }
+
 }

@@ -104,6 +104,13 @@ grails:
                       access: ['permitAll']
                     - pattern: '/message/show/**'
                       access: ['permitAll']
+                    - pattern: '/user/index/'
+                      access: ['permitAll']
+                    - pattern: '/user/show/**'
+                      access: ['permitAll']
+                    - pattern: '/customError/'
+                      access: ['permitAll']
+
         logout:
             postOnly: false
 ---

@@ -15,38 +15,40 @@ class RoleController {
 
     def index(Integer max) {
         List<Role> roles = roleService.index(max)
-        respond roles, model: [roleCount: roles.size()]
+        respond(roles, model: [roleCount: roles.size()])
     }
 
     def show(Role role) {
-        respond role
+        respond(role)
     }
 
     def create() {
-        respond new Role(params)
+        respond(new Role(params))
     }
 
     @Transactional
     def save(Role role) {
 
-        roleService.save(role)
+        Role localRole = roleService.save(role)
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'role.label', default: 'Role'), role.id])
-                redirect role
-            }
-            '*' { respond role, [status: CREATED] }
-        }
+        redirect(controller: "role", action: "show", id: localRole.id, params: [role: localRole], status: CREATED)
+//        request.withFormat {
+//            form multipartForm {
+//                flash.message = message(code: 'default.created.message', args: [message(code: 'role.label', default: 'Role'), role.id])
+//                redirect role
+//            }
+//            '*' { respond role, [status: CREATED] }
+//        }
     }
 
     protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'role.label', default: 'Role'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NOT_FOUND }
-        }
+        redirect(controller: "role", action: "index", method: "GET", status: NOT_FOUND)
+//        request.withFormat {
+//            form multipartForm {
+//                flash.message = message(code: 'default.not.found.message', args: [message(code: 'role.label', default: 'Role'), params.id])
+//                redirect action: "index", method: "GET"
+//            }
+//            '*' { render status: NOT_FOUND }
+//        }
     }
 }

@@ -5,7 +5,7 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
 @GrailsCompileStatic
-@ToString(includeNames = true)
+@ToString(includeNames = true, includes = "id,username" /*excludes = "subscribers"*/)
 @EqualsAndHashCode(includes = 'username')
 class User implements Serializable{
 
@@ -29,8 +29,11 @@ class User implements Serializable{
 
     static mapping = {
         messages lazy: false
+        subscribers lazy: false, joinTable: [name: 'user_subscriber', column: 'subscriber_id', key: 'user_id']
     }
 
-    static hasMany = [messages: Message]
+    static hasMany = [messages: Message, subscribers: User]
+
+//    static belongsTo = [User]
 
 }
