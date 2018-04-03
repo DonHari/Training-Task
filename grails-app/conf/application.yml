@@ -73,7 +73,7 @@ grails:
         springsecurity:
             userLookup:
               userDomainClassName: untitled3.User
-              authorityJoinClassName: untitled3.UserRole
+              authorityJoinClassName: untitled3.UserRoleService
             authority:
               className: untitled3.Role
             password:

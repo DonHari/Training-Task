@@ -14,11 +14,18 @@ class RoleServiceImplService implements RoleService {
     @Override
     Role save(Role role) {
         if (role) {
-            if(Role.findAllByAuthority(role.authority).size() != 1) {
+            if (Role.findAllByAuthority(role.authority).size() != 1) {
                 role.save()
             } else {
                 throw new AlreadyExistsException("This role already exists")
             }
+        }
+    }
+
+    @Override
+    Role findByAuthority(String authority) {
+        if (authority) {
+            Role.findByAuthority(authority)
         }
     }
 }

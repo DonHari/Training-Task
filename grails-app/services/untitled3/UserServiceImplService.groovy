@@ -6,6 +6,9 @@ import org.springframework.security.core.context.SecurityContextHolder
 @Transactional
 class UserServiceImplService implements UserService {
 
+    RoleService roleService
+    UserRoleService userRoleService
+
     @Override
     List<User> index(Integer max) {
         Integer localMax = Math.min(max ?: 10, 100)
@@ -19,10 +22,7 @@ class UserServiceImplService implements UserService {
                 throw new AlreadyExistsException("This username is not available")
             }
             User localUser = user.save()
-            UserRole userRole = new UserRole()
-            userRole.user = localUser
-            userRole.role = Role.findByAuthority("ROLE_USER")
-            userRole.save()
+            userRoleService.save(new UserRole(user: localUser, role: roleService.findByAuthority("ROLE_USER")))
             return localUser
         }
     }
@@ -39,5 +39,11 @@ class UserServiceImplService implements UserService {
             return localSubscriber
         }
         return null
+    }
+
+    User get(Long id) {
+        if (id) {
+            User.get(id)
+        }
     }
 }

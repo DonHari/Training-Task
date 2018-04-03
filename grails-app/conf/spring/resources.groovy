@@ -2,6 +2,7 @@ package spring
 
 import untitled3.MessageServiceImplService
 import untitled3.RoleServiceImplService
+import untitled3.SecurityServiceImplService
 import untitled3.UserDetailsService
 import untitled3.UserServiceImplService
 
@@ -15,6 +16,9 @@ beans = {
     }
     userService(UserServiceImplService){
         ref('userService')
+    }
+    securityService(SecurityServiceImplService){
+        ref('securityService')
     }
 
     userDetailsService(UserDetailsService)

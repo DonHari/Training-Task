@@ -74,8 +74,8 @@ class MessageControllerSpec extends Specification {
     def "should update message"() {
         given:
             String newContent = "new content"
-            controller.messageService = Stub(MessageService) {
-                save(_) >> new Message(content: newContent, createdAt: new Date(1), author: new User(id: 1, username: "test", password: "test", name: "test"), id: 1)
+            controller.messageService = Mock(MessageService) {
+                1 * save(_) >> new Message(content: newContent, createdAt: new Date(1), author: new User(id: 1, username: "test", password: "test", name: "test"), id: 1)
             }
         when:
             request.method = 'PUT'

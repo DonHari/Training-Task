@@ -14,21 +14,20 @@ import spock.lang.Specification
 class MessageServiceImplServiceSpec extends Specification {
 
     def setup() {
-        User authUser = new User(username: "auth", password: "auth", name: "auth").save()
-        UserDetails userDetails = new UserDetails(
-                authUser.username,
-                authUser.password,
-                authUser.enabled,
-                !authUser.accountExpired,
-                !authUser.passwordExpired,
-                !authUser.accountLocked,
-                new LinkedList<GrantedAuthority>(),
-                authUser.id,
-                authUser.name)
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null)
-        SecurityContextHolder.getContext().setAuthentication(authentication)
+//        User authUser = new User(username: "auth", password: "auth", name: "auth").save()
+//        UserDetails userDetails = new UserDetails(
+//                authUser.username,
+//                authUser.password,
+//                authUser.enabled,
+//                !authUser.accountExpired,
+//                !authUser.passwordExpired,
+//                !authUser.accountLocked,
+//                new LinkedList<GrantedAuthority>(),
+//                authUser.id,
+//                authUser.name)
+//        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null)
+//        SecurityContextHolder.getContext().setAuthentication(authentication)
     }
-
 
     void "should invoke index method"() {
         setup:
@@ -45,7 +44,6 @@ class MessageServiceImplServiceSpec extends Specification {
             messages[2] == message3
     }
 
-
     void "should invoke index method with max parameter"() {
         setup:
             int max = 2
@@ -61,49 +59,39 @@ class MessageServiceImplServiceSpec extends Specification {
             messages[1] == message2
     }
 
-
     void "should save message"() {
         setup:
-            User user = new User(username: "save test", password: "save test", name: "save test").save()
-            Message message = new Message(content: "some content", createdAt: new Date(), author: user)
+            Message message = new Message(content: "some content")
+            User user = new User(username: "test", name: "test", password: "test", id: 23)
+            service.securityService = Mock(SecurityService) {
+                getAuthorizedUser() >> user
+            }
         when:
             service.save(message)
         then:
             Message.count == 1
             Message.get(1) == message
-        cleanup:
-            SecurityContextHolder.getContext().setAuthentication(null)
+            Message.get(1).author == user
+            1 * service.securityService.getAuthorizedUser()
     }
 
 
     void "should delete message"() {
         setup:
-            SecurityContextHolder.getContext().setAuthentication(null)//clear auth token
-            User user = new User(username: "delete test", password: "test", name: "test").save()
-            UserDetails userDetails = new UserDetails(
-                    user.username,
-                    user.password,
-                    user.enabled,
-                    !user.accountExpired,
-                    !user.passwordExpired,
-                    !user.accountLocked,
-                    new LinkedList<GrantedAuthority>(),
-                    user.id,
-                    user.name)
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null)
-            SecurityContextHolder.getContext().setAuthentication(authentication)
+            User user = new User(username: "delete test", password: "test", name: "test", id: 2).save()
             Message message1 = new Message(content: "some content", createdAt: new Date(3), author: user).save()
             Message message2 = new Message(content: "some content", createdAt: new Date(2), author: user).save()
             Message message3 = new Message(content: "some content", createdAt: new Date(1), author: user).save()
+            service.securityService = Mock(SecurityService) {
+                1 * getAuthorizedUser() >> user // todo doesn't work. It isn't return a user
+            }
         when:
             service.delete(message2)
         then:
             Message.count == 2
             Message.get(1) == message1
             Message.get(3) == message3
-        cleanup:
-            SecurityContextHolder.getContext().setAuthentication(null)
-
+            1 * service.securityService.getAuthorizedUser()
     }
 
 

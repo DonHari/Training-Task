@@ -5,4 +5,5 @@ interface UserService {
     List<User> index(Integer max)
     User save(User user)
     User subscribe(User user)
+    User get(Long id)
 }

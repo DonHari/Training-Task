@@ -16,7 +16,7 @@ class UserRoleSpec extends Specification {
     }
 
     void "test something"() {
-        expect:"fix me"
+        expect: "fix me"
             true == false
     }
 }

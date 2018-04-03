@@ -4,4 +4,5 @@ interface RoleService {
 
     List<Role> index(Integer max)
     Role save(Role role)
+    Role findByAuthority(String authority)
 }

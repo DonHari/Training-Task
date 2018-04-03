@@ -1,4 +1,4 @@
-<%@ page import="untitled3.Role; untitled3.UserRole" %>
+<%@ page import="untitled3.UserRoleService; untitled3.Role; untitled3.UserRoleService" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -34,7 +34,7 @@
                     <div class="property-value">
                         <%
                             List<Role> roles = new LinkedList<>()
-                            UserRole.findAllByUser(user).each {
+                            untitled3.UserRoleService.findAllByUser(user).each {
                                 roles.add(it.getRole())
                             }
                         %>
