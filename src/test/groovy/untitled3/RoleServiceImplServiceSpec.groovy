@@ -55,6 +55,7 @@ class RoleServiceImplServiceSpec extends Specification {
         when:
             service.save(newRole)
         then:
+            thrown(AlreadyExistsException)
             Role.count == 3
     }
 }

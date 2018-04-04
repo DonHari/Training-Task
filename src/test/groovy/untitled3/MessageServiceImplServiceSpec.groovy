@@ -3,31 +3,12 @@ package untitled3
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import org.springframework.security.access.AccessDeniedException
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import spock.lang.Specification
 
 @Mock([Message, User])
 @TestFor(MessageServiceImplService)
 class MessageServiceImplServiceSpec extends Specification {
-
-    def setup() {
-//        User authUser = new User(username: "auth", password: "auth", name: "auth").save()
-//        UserDetails userDetails = new UserDetails(
-//                authUser.username,
-//                authUser.password,
-//                authUser.enabled,
-//                !authUser.accountExpired,
-//                !authUser.passwordExpired,
-//                !authUser.accountLocked,
-//                new LinkedList<GrantedAuthority>(),
-//                authUser.id,
-//                authUser.name)
-//        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null)
-//        SecurityContextHolder.getContext().setAuthentication(authentication)
-    }
 
     void "should invoke index method"() {
         setup:
@@ -64,7 +45,7 @@ class MessageServiceImplServiceSpec extends Specification {
             Message message = new Message(content: "some content")
             User user = new User(username: "test", name: "test", password: "test", id: 23)
             service.securityService = Mock(SecurityService) {
-                getAuthorizedUser() >> user
+                1 * getAuthorizedUser() >> user
             }
         when:
             service.save(message)
@@ -72,18 +53,16 @@ class MessageServiceImplServiceSpec extends Specification {
             Message.count == 1
             Message.get(1) == message
             Message.get(1).author == user
-            1 * service.securityService.getAuthorizedUser()
     }
-
 
     void "should delete message"() {
         setup:
-            User user = new User(username: "delete test", password: "test", name: "test", id: 2).save()
+            User user = new User(username: "delete test", password: "test", name: "test").save()
             Message message1 = new Message(content: "some content", createdAt: new Date(3), author: user).save()
             Message message2 = new Message(content: "some content", createdAt: new Date(2), author: user).save()
             Message message3 = new Message(content: "some content", createdAt: new Date(1), author: user).save()
             service.securityService = Mock(SecurityService) {
-                1 * getAuthorizedUser() >> user // todo doesn't work. It isn't return a user
+                1 * getAuthorizedUser() >> user
             }
         when:
             service.delete(message2)
@@ -91,21 +70,21 @@ class MessageServiceImplServiceSpec extends Specification {
             Message.count == 2
             Message.get(1) == message1
             Message.get(3) == message3
-            1 * service.securityService.getAuthorizedUser()
     }
-
 
     void "shouldn't delete message because request not from author"() {
         setup:
             User user = new User(username: "test", password: "test", name: "test").save()
-            Message message1 = new Message(content: "some content", createdAt: new Date(3), author: user).save()
-            Message message2 = new Message(content: "some content", createdAt: new Date(2), author: user).save()
-            Message message3 = new Message(content: "some content", createdAt: new Date(1), author: user).save()
+            User author = new User(username: "author", password: "author", name: "author").save()
+            Message message1 = new Message(content: "some content", createdAt: new Date(3), author: author).save()
+            Message message2 = new Message(content: "some content", createdAt: new Date(2), author: author).save()
+            Message message3 = new Message(content: "some content", createdAt: new Date(1), author: author).save()
+            service.securityService = Mock(SecurityService) {
+                1 * getAuthorizedUser() >> user
+            }
         when:
             service.delete(message2)
         then:
             thrown(AccessDeniedException)
-        cleanup:
-            SecurityContextHolder.getContext().setAuthentication(null)
     }
 }

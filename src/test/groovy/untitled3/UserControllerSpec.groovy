@@ -16,8 +16,8 @@ class UserControllerSpec extends Specification {
             User user1 = new User(username: "test1", password: "test1", name: "test1")
             User user2 = new User(username: "test2", password: "test2", name: "test2")
             User user3 = new User(username: "test3", password: "test3", name: "test3")
-            controller.userService = Stub(UserService) {
-                index(_) >> [user1, user2, user3]
+            controller.userService = Mock(UserService) {
+                1 * index(_) >> [user1, user2, user3]
             }
         when:
             controller.index()
@@ -49,8 +49,8 @@ class UserControllerSpec extends Specification {
     def "should save given user"() {
         given:
             User user = new User(username: "test1", password: "test1", name: "test1", id: 1)
-            controller.userService = Stub(UserService) {
-                save(_) >> user
+            controller.userService = Mock(UserService) {
+                1 * save(_) >> user
             }
         when:
             request.method = 'POST'
@@ -63,8 +63,8 @@ class UserControllerSpec extends Specification {
     def "should subscribe to given user"() {
         given:
             User user = new User(username: "subscriber", password: "subscriber", name: "subscriber", id: 1)
-            controller.userService = Stub(UserService) {
-                subscribe(_) >> user
+            controller.userService = Mock(UserService) {
+                1 * subscribe(_) >> user
             }
         when:
             request.method = 'POST'
@@ -77,8 +77,8 @@ class UserControllerSpec extends Specification {
     def "should return error on subscription fail"() {
         given:
             User user = new User(username: "subscriber", password: "subscriber", name: "subscriber", id: 1)
-            controller.userService = Stub(UserService) {
-                subscribe(_) >> null
+            controller.userService = Mock(UserService) {
+                1 * subscribe(_) >> null
             }
         when:
             request.method = 'POST'
